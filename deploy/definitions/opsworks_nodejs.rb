@@ -30,7 +30,9 @@ define :opsworks_nodejs do
     variables(
       :deploy => deploy,
       :application_name => application,
-      :monitored_script => "#{deploy[:deploy_to]}/current/server.js"
+      :meza_script_1 => "#{deploy[:deploy_to]}/current/meza-serviced.js",
+      :meza_script_2 => "#{deploy[:deploy_to]}/current/meza-wwwd.js"
+
     )
     notifies :restart, "service[monit]", :immediately
   end
