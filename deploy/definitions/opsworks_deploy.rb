@@ -148,6 +148,8 @@ define :opsworks_deploy do
           end
         elsif deploy[:application_type] == 'nodejs'
           if deploy[:auto_npm_install_on_deploy]
+            Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su 'echo "" > #{app_root_path}/logs/www.log;echo "" > #{app_root_path}/logs/www.log;' 2>&1"))
+            Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su 'chown deploy:www-data #{app_root_path}/logs/www.log; chown deploy:www-data #{app_root_path}/logs/www.log;' 2>&1"))
             OpsWorks::NodejsConfiguration.npm_install(application, node[:deploy][application], release_path, node[:opsworks_nodejs][:npm_install_options])
           end
         end
