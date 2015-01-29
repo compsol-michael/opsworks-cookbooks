@@ -148,8 +148,8 @@ define :opsworks_deploy do
           end
         elsif deploy[:application_type] == 'nodejs'
           if deploy[:auto_npm_install_on_deploy]
-            Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su  - #{app_config[:user]} -c 'touch #{release_path}/logs/www.log; touch #{release_path}/logs/www.log;' 2>&1"))
-            Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su  - #{app_config[:user]} -c 'chown deploy:www-data #{release_path}/logs/www.log; chown deploy:www-data #{release_path}/logs/www.log;' 2>&1"))
+            Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su  - #{node[:deploy][application][:user]} -c 'touch #{release_path}/logs/www.log; touch #{release_path}/logs/www.log;' 2>&1"))
+            Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su  - #{node[:deploy][application][:user]} -c 'chown deploy:www-data #{release_path}/logs/www.log; chown deploy:www-data #{release_path}/logs/www.log;' 2>&1"))
             OpsWorks::NodejsConfiguration.npm_install(application, node[:deploy][application], release_path, node[:opsworks_nodejs][:npm_install_options])
           end
         end
