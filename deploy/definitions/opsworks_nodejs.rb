@@ -31,7 +31,8 @@ define :opsworks_nodejs do
       :deploy => deploy,
       :application_name => application,
       :meza_script_1 => "#{deploy[:deploy_to]}/current/meza-serviced.js",
-      :meza_script_2 => "#{deploy[:deploy_to]}/current/meza-wwwd.js"
+      :meza_script_2 => "#{deploy[:deploy_to]}/current/meza-wwwd.js",
+      :meza_script_3 => "#{deploy[:deploy_to]}/current/server.js"
 
     )
     notifies :restart, "service[monit]", :immediately
