@@ -11,6 +11,7 @@ node[:deploy].each do |application, deploy|
     cwd "#{deploy[:deploy_to]}/current"
     code <<-EOH
     ln -sf etc/nginx/sites-available/meza-https /etc/nginx/conf.d/meza.conf;
+    service nginx restart;
     EOH
   end
 end      
