@@ -6,7 +6,7 @@
   script "create_symbolic_link_nginx" do
     interpreter "bash"
     user "root"
-    cwd "#{deploy[:deploy_to]}/current"
+    cwd "/"
     code <<-EOH
     ln -sf /srv/www/meza_webapp/current/etc/nginx/sites-available/meza-https /etc/nginx/conf.d/meza.conf;
     service nginx restart;
