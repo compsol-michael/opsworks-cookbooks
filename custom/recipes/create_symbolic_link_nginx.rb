@@ -9,6 +9,6 @@
     cwd "/"
     code <<-EOH
     ln -sf /srv/www/meza_webapp/current/etc/nginx/sites-available/meza-https /etc/nginx/conf.d/meza.conf;
-    service nginx restart;
+    /usr/sbin/invoke-rc.d nginx restart;
     EOH
   end
