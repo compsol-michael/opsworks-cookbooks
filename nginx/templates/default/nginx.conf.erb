@@ -1,46 +1,95 @@
-user <%= node[:nginx][:user] %>;
-worker_processes  <%= node[:nginx][:worker_processes] %>;
-
-error_log  <%= node[:nginx][:log_dir] %>/error.log;
-pid        <%= node[:nginx][:pid_file] %>;
+user www-data;
+worker_processes 4;
+pid /var/run/nginx.pid;
 
 events {
-  worker_connections  <%= node[:nginx][:worker_connections] %>;
+  worker_connections 768;
+  # multi_accept on;
 }
 
 http {
-  include       <%= node[:nginx][:dir] %>/mime.types;
-  default_type  application/octet-stream;
 
-  <% node[:nginx][:log_format].each do |name, format| %>
-  log_format <%= name %> <%= format %>;
-  <% end %>
-
-  access_log	<%= node[:nginx][:log_dir] %>/access.log;
+  ##
+  # Basic Settings
+  ##
 
   sendfile on;
   tcp_nopush on;
   tcp_nodelay on;
+  keepalive_timeout 65;
+  types_hash_max_size 2048;
+  # server_tokens off;
 
-  <% if node[:nginx][:keepalive] == "on" %>
-  keepalive_timeout  <%= node[:nginx][:keepalive_timeout] %>;
-  <% end %>
+  # server_names_hash_bucket_size 64;
+  # server_name_in_redirect off;
 
-  gzip  <%= node[:nginx][:gzip] %>;
-  gzip_static  <%= node[:nginx][:gzip_static] %>;
-  <% if node[:nginx][:gzip] == "on" %>
-  gzip_http_version <%= node[:nginx][:gzip_http_version] %>;
-  gzip_comp_level <%= node[:nginx][:gzip_comp_level] %>;
-  gzip_proxied <%= node[:nginx][:gzip_proxied] %>;
-  gzip_types <%= node[:nginx][:gzip_types].join(' ') %>;
-  gzip_vary <%= node[:nginx][:gzip_vary] %>;
-  gzip_disable "<%= node[:nginx][:gzip_disable] %>";
-  <% end %>
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
 
-  client_max_body_size <%= node[:nginx][:client_max_body_size] %>;
+  ##
+  # Logging Settings
+  ##
 
-  server_names_hash_bucket_size <%= node[:nginx][:server_names_hash_bucket_size] %>;
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log;
 
-  include <%= node[:nginx][:dir] %>/conf.d/*.conf;
-  include <%= node[:nginx][:dir] %>/sites-enabled/*;
+  ##
+  # Gzip Settings
+  ##
+
+  gzip on;
+  gzip_disable "msie6";
+
+  # gzip_vary on;
+  # gzip_proxied any;
+  # gzip_comp_level 6;
+  # gzip_buffers 16 8k;
+  # gzip_http_version 1.1;
+  # gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+  ##
+  # nginx-naxsi config
+  ##
+  # Uncomment it if you installed nginx-naxsi
+  ##
+
+  #include /etc/nginx/naxsi_core.rules;
+
+  ##
+  # nginx-passenger config
+  ##
+  # Uncomment it if you installed nginx-passenger
+  ##
+  
+  #passenger_root /usr;
+  #passenger_ruby /usr/bin/ruby;
+
+  ##
+  # Virtual Host Configs
+  ##
+
+  include /etc/nginx/conf.d/*.conf;
+  include /etc/nginx/sites-enabled/*;
 }
+
+
+#mail {
+# # See sample authentication script at:
+# # http://wiki.nginx.org/ImapAuthenticateWithApachePhpScript
+# 
+# # auth_http localhost/auth.php;
+# # pop3_capabilities "TOP" "USER";
+# # imap_capabilities "IMAP4rev1" "UIDPLUS";
+# 
+# server {
+#   listen     localhost:110;
+#   protocol   pop3;
+#   proxy      on;
+# }
+# 
+# server {
+#   listen     localhost:143;
+#   protocol   imap;
+#   proxy      on;
+# }
+#}
