@@ -154,6 +154,7 @@ define :opsworks_deploy do
             Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su -c 'touch /var/log/meza-wwwd.log; chown deploy:www-data /var/log/meza-wwwd.log;' 2>&1"))
             Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su -c 'touch /var/log/meza-serviced.log; chown deploy:www-data /var/log/meza-serviced.log;' 2>&1"))
             Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su -c 'touch /var/log/meza-server.log; chown deploy:www-data /var/log/meza-server.log;' 2>&1"))
+            Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su -c 'touch /var/log/meza-crond.log; chown deploy:www-data /var/log/meza-crond.log;' 2>&1"))
             Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su  - #{node[:deploy][application][:user]} -c 'touch #{release_path}/logs/www.log; touch #{release_path}/logs/www.log;' 2>&1"))
             Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su  - #{node[:deploy][application][:user]} -c 'chown deploy:www-data #{release_path}/logs/www.log; chown deploy:www-data #{release_path}/logs/www.log;' 2>&1"))
             OpsWorks::NodejsConfiguration.npm_install(application, node[:deploy][application], release_path, node[:opsworks_nodejs][:npm_install_options])
